@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Google.Apis": "1.20.0",
+    "Google.Apis.Drive.v3": "1.20.0.749",
+    "Jaxx.FileSync.Shared": "1.0.0-*",
+    "Microsoft.Win32.Registry": "4.3.0",
+    "NETStandard.Library": "1.6.0"
+  },
+
+  "frameworks": {
+    "netstandard1.4": {
+      "imports": "dnxcore50"
+    }
+  }
+}
