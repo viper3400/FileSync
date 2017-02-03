@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Jaxx.FileSync": {
-      "commandName": "Project",
-      "commandLineArgs": "create help"
+      "commandName": "Project"
     }
   }
 }
