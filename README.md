@@ -7,5 +7,11 @@
 ## Usage
 
 ```
-Jaxx.FileSync.exe ["PATH_TO_CERTFILE\key.p12"] ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] ["DRIVEUSER@googlemail.com"] ["UPLOAD_FILE"] ["root"]
+Jaxx.FileSync.exe 
+      -c ["PATH_TO_CERTFILE\key.p12"] 
+      -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+      create file
+      -g ["DRIVEUSER@googlemail.com"] 
+      -f ["UPLOAD_FILE"]
+      -d ["root"]
 ```
