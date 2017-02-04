@@ -3,7 +3,9 @@
 * FileSync is very basic implementation of .Net GoogleDriveAPI v3. 
 * It Uploads a single file to Google Drive cloud storage, using a Google [service account](https://developers.google.com/api-client-library/dotnet/get_started#service-accounts).
 * It grants permission to this file to another Google Drive account.
-* Is shipped with a tiny command line application
+* It is shipped with a tiny command line application.
+
+[![Build status](https://ci.appveyor.com/api/projects/status/bn5jakeg7dkk3uhf/branch/master?svg=true)](https://ci.appveyor.com/project/viper3400/filesync/branch/master)
 
 ## Command Line Usage
 
@@ -58,7 +60,7 @@ authenticated by an email account and a private certification file (key.p12).
 To access his uloaded backups he grants his own google account the necessary permissions, so it will be 
 visible in his own cloud drive in "shared files".
 
-## Enhancments
+## Enhancements
 
 I plan to implement a "houskeeping" feature in a next step. 
 This should add a deletion feature which "cleans" files having reached a certain age. 
