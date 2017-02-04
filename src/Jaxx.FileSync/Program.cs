@@ -54,6 +54,31 @@ namespace Jaxx.FileSync
                 });
             });
 
+            create.Command("folder", config =>
+            {
+                config.Description = "Create a remote folder (directory).";
+                config.HelpOption("-? | -h | --help");
+                var permissionList = config.Option("-g | --grantPermission", "Grant permisssion to the created object (mandatory).", CommandOptionType.SingleValue);
+                var newFolderName = config.Option("-m | --name", "Name of the new folder (mandatory).", CommandOptionType.SingleValue);
+                var parentFolderName = config.Option("-p | --parentFolder", "Name of the parent folder ('root' for root folder) (mandatory).", CommandOptionType.SingleValue);
+
+                config.OnExecute(() =>
+                {
+                    if (certFile.HasValue() && serviceAccountMail.HasValue() && permissionList.HasValue() && newFolderName.HasValue() && parentFolderName.HasValue())
+                    {
+                        CreateFolder(certFile.Value(), serviceAccountMail.Value(), permissionList.Value(), newFolderName.Value(), parentFolderName.Value());
+                        return 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"A mandatory value was not set.");
+                        config.ShowHelp();
+                        return 1;
+                    }
+
+                });
+            });
+
             app.OnExecute(() =>
             {
                 if (!certFile.HasValue() && !serviceAccountMail.HasValue())
@@ -100,6 +125,12 @@ namespace Jaxx.FileSync
 
                 uploader.UploadFile(uploadFile, uploadFileFolder);
             }
+        }
+
+        private static void CreateFolder(string certFile, string serviceAccountMai, string userName, string folderName, string parentFolderName)
+        {
+
+            throw new NotImplementedException();
         }
     }
 }
