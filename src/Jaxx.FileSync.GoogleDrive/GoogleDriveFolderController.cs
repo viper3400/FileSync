@@ -20,7 +20,13 @@ namespace Jaxx.FileSync.GoogleDrive
 
         public bool CreateFolder(string name, string parentFolder)
         {
-            throw new NotImplementedException();
+            var folder = DriveApi.createDirectory(_service, name, name, parentFolder);
+            foreach (var user in _grantedUsers)
+            {
+                DriveApi.InsertPermission(_service, folder.Id, user, "user", "writer");
+            }
+
+            return true;
         }
 
         public bool DeleteFolder(string name)
