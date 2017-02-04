@@ -25,12 +25,31 @@ namespace Jaxx.FileSync.GoogleDrive
 
             File NewDirectory = null;
 
+
+            // Init the parentId
+            string parentId = "root";
+            // Get the file id of the parent Folder, in case it is not "root"
+            if (_parent.ToUpper() != "ROOT")
+            {
+                var parentList = GetFilesByName(_service, _parent, NameSearchOperators.Is);
+                // it's possible, that folder name was given more than once -> for this time we will handle the 
+                // request just in case we find a unique folder name, otherwise we are not sure, which folder we found.
+                if (parentList.Count() != 1)
+                {
+                    throw new ArgumentException($"Parent {_parent} not found", "parent");
+                }
+
+                parentId = parentList.FirstOrDefault().Id;
+            }
+            // in case parentId is still null, we will create our new folder in root folder
+            
+
             // Create metaData for a new Directory
             File body = new File();
             body.Name = _title;
             body.Description = _description;
             body.MimeType = "application/vnd.google-apps.folder";
-            body.Parents = new List<string> { _parent };
+            body.Parents = new List<string> { parentId };
             try
             {
                 FilesResource.CreateRequest request = _service.Files.Create(body);
@@ -178,6 +197,27 @@ namespace Jaxx.FileSync.GoogleDrive
             return Files;
         }
 
+        /// <summary>
+        /// List all of the files and directories matching the search name
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="name">The name to search for.</param>
+        /// <param name="searchOperator">Choose an operator out of 'contains' (default), '=', '!='</param>
+        /// <returns></returns>
+        public static List<File> GetFilesByName(DriveService service, string name, NameSearchOperators searchOperator)
+        {
+            switch(searchOperator)
+            {
+                default:
+                case NameSearchOperators.Contains:                
+                    return GetFiles(service, $"name contains '{name}'");
+                case NameSearchOperators.Is:
+                    return GetFiles(service, $"name = '{name}'");
+                case NameSearchOperators.IsNot:
+                    return GetFiles(service, $"name != '{name}'");   
+            }
+        }
+
         // tries to figure out the mime type of the file.
         private static string GetMimeType(string fileName)
         {
@@ -189,6 +229,11 @@ namespace Jaxx.FileSync.GoogleDrive
                 mimeType = regKey.GetValue("Content Type").ToString();
             return mimeType;
         }
+
+        /// <summary>
+        /// Operators for GetFileNameSearch
+        /// </summary>
+        public enum NameSearchOperators { Contains, Is, IsNot };
     }
 }
 

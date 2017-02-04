@@ -65,7 +65,7 @@ namespace Jaxx.FileSync
                 config.Description = "Create a remote folder (directory).";
                 config.HelpOption("-? | -h | --help");
                 var permissionList = config.Option("-g | --grantPermission", "Grant permisssion to the created object (mandatory).", CommandOptionType.SingleValue);
-                var newFolderName = config.Option("-m | --name", "Name of the new folder (mandatory).", CommandOptionType.SingleValue);
+                var newFolderName = config.Option("-n | --name", "Name of the new folder (mandatory).", CommandOptionType.SingleValue);
                 var parentFolderName = config.Option("-p | --parentFolder", "Name of the parent folder ('root' for root folder) (mandatory).", CommandOptionType.SingleValue);
 
                 config.OnExecute(() =>
