@@ -29,20 +29,10 @@ namespace Jaxx.FileSync
                 config.HelpOption("-? | -h | --help"); //show help on --help
             });
 
-            create.Command("help", config =>
-            {
-                config.Description = "get help!";
-                config.OnExecute(() =>
-                {
-                    create.ShowHelp("catapult");
-                    return 1;
-                });
-            });
-
             create.Command("file", config =>
             {
                 config.Description = "Create a remote file (upload).";
-                config.HelpOption("-? | -h | --help");                
+                config.HelpOption("-? | -h | --help");
                 var permissionList = config.Option("-g | --grantPermission", "Grant permisssion to the created object (mandatory).", CommandOptionType.SingleValue);
                 var uploadFile = config.Option("-f | --file", "Path to upload file (mandatory).", CommandOptionType.SingleValue);
                 var uploadFileFolder = config.Option("-d | --uploadDir", "Name of the remote dir (mandatory).", CommandOptionType.SingleValue);
@@ -60,7 +50,7 @@ namespace Jaxx.FileSync
                         config.ShowHelp();
                         return 1;
                     }
-                    
+
                 });
             });
 
@@ -73,10 +63,17 @@ namespace Jaxx.FileSync
                     return 1;
                 }
 
-                return 0;                
+                return 0;
             });
             app.HelpOption("-? | -h | --help");
-            var result = app.Execute(args);
+            try
+            {
+                var result = app.Execute(args);
+            }
+            catch (CommandParsingException e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
 
             //Console.WriteLine("Press a key to continue ...");
