@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Jaxx.FileSync.Shared.Interfaces
 {
-    interface IFolderController
+    public interface IFolderController
     {
         bool CreateFolder(string name, string parentFolder);
         bool DeleteFolder(string name);

@@ -15,7 +15,7 @@ namespace Jaxx.FileSync
         {
             // prepare the di container
             var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<GoogleDriveUploadModule>();
+            containerBuilder.RegisterModule<GoogleDriveModule>();
             var iocContainer = containerBuilder.Build();
 
             // prepare command line application
