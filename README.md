@@ -4,8 +4,11 @@
 * It Uploads a single file to Google Drive cloud storage, using a Google [service account](https://developers.google.com/api-client-library/dotnet/get_started#service-accounts).
 * It grants permission to this file to another Google Drive account.
 * It is shipped with a tiny command line application.
+* For the moment it is *just* an uploader, not a file syncing tool.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/bn5jakeg7dkk3uhf/branch/master?svg=true)](https://ci.appveyor.com/project/viper3400/filesync/branch/master)
+
+[Download latest release](https://github.com/viper3400/FileSync/releases/latest)
 
 ## Command Line Usage
 
