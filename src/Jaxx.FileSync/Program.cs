@@ -130,22 +130,20 @@ namespace Jaxx.FileSync
 
         private static void CreateFolder(IContainer iocContainer, string certFile, string serviceAccountMail, string userName, string folderName, string parentFolderName)
         {
-            throw new NotImplementedException();
+            using (var scope = iocContainer.BeginLifetimeScope())
+            {
+                var userlist = new List<string> { userName };
+                var accountProvider = scope.Resolve<IGoogleAccountProvider>(
+                    new NamedParameter("certFile", certFile),
+                    new NamedParameter("serviceAccountEmail", serviceAccountMail));
 
-            //using (var scope = iocContainer.BeginLifetimeScope())
-            //{
-            //    var userlist = new List<string> { userName };
-            //    var accountProvider = scope.Resolve<IGoogleAccountProvider>(
-            //        new NamedParameter("certFile", certFile),
-            //        new NamedParameter("serviceAccountEmail", serviceAccountMail));
+                var folderController = scope.Resolve<IFolderController>(
+                    new TypedParameter(typeof(IEnumerable<string>), userlist),
+                    new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
 
-            //    var uploader = scope.Resolve<IUploader>(
-            //        new TypedParameter(typeof(IEnumerable<string>), userlist),
-            //        new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
+                folderController.CreateFolder(folderName, parentFolderName);
+            }
 
-            //    uploader.UploadFile(uploadFile, uploadFileFolder);
-            //}
-            
         }
     }
 }
