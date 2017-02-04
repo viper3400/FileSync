@@ -13,6 +13,12 @@ namespace Jaxx.FileSync
     {
         public static void Main(string[] args)
         {
+            // prepare the di container
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule<GoogleDriveUploadModule>();
+            var iocContainer = containerBuilder.Build();
+
+            // prepare command line application
             CommandLineApplication app =
                 new CommandLineApplication(throwOnUnexpectedArg: false);
 
@@ -41,7 +47,7 @@ namespace Jaxx.FileSync
                 {
                     if (certFile.HasValue() && serviceAccountMail.HasValue() && permissionList.HasValue() && uploadFile.HasValue() && uploadFileFolder.HasValue())
                     {
-                        CreateFile(certFile.Value(), serviceAccountMail.Value(), permissionList.Value(), uploadFile.Value(), uploadFileFolder.Value());
+                        CreateFile(iocContainer, certFile.Value(), serviceAccountMail.Value(), permissionList.Value(), uploadFile.Value(), uploadFileFolder.Value());
                         return 0;
                     }
                     else
@@ -66,7 +72,7 @@ namespace Jaxx.FileSync
                 {
                     if (certFile.HasValue() && serviceAccountMail.HasValue() && permissionList.HasValue() && newFolderName.HasValue() && parentFolderName.HasValue())
                     {
-                        CreateFolder(certFile.Value(), serviceAccountMail.Value(), permissionList.Value(), newFolderName.Value(), parentFolderName.Value());
+                        CreateFolder(iocContainer, certFile.Value(), serviceAccountMail.Value(), permissionList.Value(), newFolderName.Value(), parentFolderName.Value());
                         return 0;
                     }
                     else
@@ -105,13 +111,8 @@ namespace Jaxx.FileSync
             //Console.ReadLine();
         }
 
-        private static void CreateFile(string certFile, string serviceAccountMail, string userName, string uploadFile, string uploadFileFolder)
+        private static void CreateFile(IContainer iocContainer, string certFile, string serviceAccountMail, string userName, string uploadFile, string uploadFileFolder)
         {
-
-            var containerBuilder = new ContainerBuilder();
-            containerBuilder.RegisterModule<GoogleDriveUploadModule>();
-            var iocContainer = containerBuilder.Build();
-
             using (var scope = iocContainer.BeginLifetimeScope())
             {
                 var userlist = new List<string> { userName };
@@ -127,10 +128,24 @@ namespace Jaxx.FileSync
             }
         }
 
-        private static void CreateFolder(string certFile, string serviceAccountMai, string userName, string folderName, string parentFolderName)
+        private static void CreateFolder(IContainer iocContainer, string certFile, string serviceAccountMail, string userName, string folderName, string parentFolderName)
         {
-
             throw new NotImplementedException();
+
+            //using (var scope = iocContainer.BeginLifetimeScope())
+            //{
+            //    var userlist = new List<string> { userName };
+            //    var accountProvider = scope.Resolve<IGoogleAccountProvider>(
+            //        new NamedParameter("certFile", certFile),
+            //        new NamedParameter("serviceAccountEmail", serviceAccountMail));
+
+            //    var uploader = scope.Resolve<IUploader>(
+            //        new TypedParameter(typeof(IEnumerable<string>), userlist),
+            //        new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
+
+            //    uploader.UploadFile(uploadFile, uploadFileFolder);
+            //}
+            
         }
     }
 }
