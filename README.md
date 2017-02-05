@@ -70,8 +70,6 @@ Jaxx.FileSync.exe
 ### Create a Folder
 
 Starting with release 1.1.0 you can create folders in you drive storage. 
-(Feature is already included if you build the master branch from github repository).
-
 
 ```
 Jaxx.FileSync.exe 
