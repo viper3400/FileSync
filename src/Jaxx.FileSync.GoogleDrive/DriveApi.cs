@@ -112,7 +112,7 @@ namespace Jaxx.FileSync.GoogleDrive
             {
                 File body = new File();
                 body.Name = System.IO.Path.GetFileName(_uploadFile);
-                body.Description = "File uploaded by Automated MySqlBackup";
+                body.Description = "File uploaded by FileSync";
                 body.MimeType = GetMimeType(_uploadFile);
                 body.Parents = new List<string> { _parent };
                 body.WritersCanShare = true;
