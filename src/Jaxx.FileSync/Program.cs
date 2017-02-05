@@ -95,11 +95,6 @@ namespace Jaxx.FileSync
             });
         }
 
-        private static void DeleteAgedFiles(IContainer iocContainer, string v1, string v2, string v3, string v4)
-        {
-            throw new NotImplementedException();
-        }
-
         private static void ConfigureCommandLineCreateCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
         {
             var create = app.Command("create", config =>
@@ -195,7 +190,24 @@ namespace Jaxx.FileSync
 
                 folderController.CreateFolder(folderName, parentFolderName);
             }
+        }
 
+        private static void DeleteAgedFiles(IContainer iocContainer, string certFile, string serviceAccountMail, string fileAge, string folderName)
+        {
+            using (var scope = iocContainer.BeginLifetimeScope())
+            {
+                var accountProvider = scope.Resolve<IGoogleAccountProvider>(
+                    new NamedParameter("certFile", certFile),
+                    new NamedParameter("serviceAccountEmail", serviceAccountMail));
+
+                var deleter = scope.Resolve<IDeleteController>(                    
+                    new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
+
+                int age;
+                int.TryParse(fileAge, out age);
+
+                deleter.DeleteAgedFiles(age, folderName);
+            }
         }
     }
 }

@@ -12,8 +12,9 @@ namespace Jaxx.FileSync
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<GoogleDriveUploader>().As<IUploader>().UsingConstructor(typeof(IEnumerable<string>), typeof(IGoogleAccountProvider)).InstancePerDependency();            
+            builder.RegisterType<GoogleDriveUploader>().As<IUploader>().UsingConstructor(typeof(IEnumerable<string>), typeof(IGoogleAccountProvider)).InstancePerDependency();
             builder.RegisterType<GoogleDriveFolderController>().As<IFolderController>().UsingConstructor(typeof(IEnumerable<string>), typeof(IGoogleAccountProvider)).InstancePerDependency();
+            builder.RegisterType<GoogleDriverDeleteController>().As<IDeleteController>().UsingConstructor(typeof(IGoogleAccountProvider)).InstancePerDependency();
 
             builder.RegisterType<GoogleCertServiceAccountProvider>().As<IGoogleAccountProvider>().UsingConstructor(typeof(string), typeof(string)).InstancePerLifetimeScope();
         }
