@@ -24,7 +24,8 @@ namespace Jaxx.FileSync.GoogleDrive
 
             foreach (var file in files)
             {
-                Console.WriteLine($"This would delete {file.Name}, last modified on {file.ModifiedTime.Value}");                
+                //Console.WriteLine($"This would delete {file.Name}, last modified on {file.ModifiedTime.Value}");
+                Console.WriteLine($"This would delete {file.Name}, function is not yet implemented.");
             }
 
             return true;
