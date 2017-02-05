@@ -25,6 +25,83 @@ namespace Jaxx.FileSync
             var certFile = app.Option("-c | --certFile", "Path to key.p12 certificate (mandatory).", CommandOptionType.SingleValue);
             var serviceAccountMail = app.Option("-s | --serviceAccount", "Google service account mail (mandatory).", CommandOptionType.SingleValue);
 
+            ConfigureCommandLineApp(iocContainer, app, certFile, serviceAccountMail);
+
+            app.OnExecute(() =>
+            {
+                if (!certFile.HasValue() && !serviceAccountMail.HasValue())
+                {
+                    Console.WriteLine($"A mandatory value was not set.");
+                    app.ShowHelp();
+                    return 1;
+                }
+
+                return 0;
+            });
+            app.HelpOption("-? | -h | --help");
+            try
+            {
+                var result = app.Execute(args);
+            }
+            catch (CommandParsingException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+
+            //Console.WriteLine("Press a key to continue ...");
+            //Console.ReadLine();
+        }
+
+        private static void ConfigureCommandLineApp(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
+        {
+            ConfigureCommandLineCreateCommand(iocContainer, app, certFile, serviceAccountMail);
+            ConfigureCommandLineDeleteCommand(iocContainer, app, certFile, serviceAccountMail);
+        }
+
+        private static void ConfigureCommandLineDeleteCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
+        {
+            var delete = app.Command("delete", config =>
+            {
+                config.OnExecute(() =>
+                {
+                    config.ShowHelp(); //show help
+                    return 1; //return error since we didn't do anything
+                });
+                config.HelpOption("-? | -h | --help"); //show help on --help
+            });
+
+            delete.Command("agedfiles", config =>
+            {
+                config.Description = "Delete files wich haven't changed since a certain time span.";
+                config.HelpOption("-? | -h | --help");
+                var fileAge = config.Option("-a | --AgeInDays", "The time span in days (mandatory).", CommandOptionType.SingleValue);
+                var folder = config.Option("-f | --folder", "The folder in which the files should be deleted", CommandOptionType.SingleValue);
+
+                config.OnExecute(() =>
+                {
+                    if (certFile.HasValue() && serviceAccountMail.HasValue() && fileAge.HasValue() && folder.HasValue())
+                    {
+                        DeleteAgedFiles(iocContainer, certFile.Value(), serviceAccountMail.Value(), fileAge.Value(), folder.Value());
+                        return 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"A mandatory value was not set.");
+                        config.ShowHelp();
+                        return 1;
+                    }
+                });
+            });
+        }
+
+        private static void DeleteAgedFiles(IContainer iocContainer, string v1, string v2, string v3, string v4)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void ConfigureCommandLineCreateCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
+        {
             var create = app.Command("create", config =>
             {
                 config.OnExecute(() =>
@@ -84,31 +161,6 @@ namespace Jaxx.FileSync
 
                 });
             });
-
-            app.OnExecute(() =>
-            {
-                if (!certFile.HasValue() && !serviceAccountMail.HasValue())
-                {
-                    Console.WriteLine($"A mandatory value was not set.");
-                    app.ShowHelp();
-                    return 1;
-                }
-
-                return 0;
-            });
-            app.HelpOption("-? | -h | --help");
-            try
-            {
-                var result = app.Execute(args);
-            }
-            catch (CommandParsingException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
-
-            //Console.WriteLine("Press a key to continue ...");
-            //Console.ReadLine();
         }
 
         private static void CreateFile(IContainer iocContainer, string certFile, string serviceAccountMail, string userName, string uploadFile, string uploadFileFolder)
