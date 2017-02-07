@@ -42,13 +42,13 @@ namespace Jaxx.FileSync.GoogleDrive
                 parentId = parentList.FirstOrDefault().Id;
             }
             // in case parentId is still null, we will create our new folder in root folder
-            
+
 
             // Create metaData for a new Directory
             File body = new File();
             body.Name = _title;
             body.Description = _description;
-            body.MimeType = "application/vnd.google-apps.folder";
+            body.MimeType = "application/vnd.google-apps.folder";            
             body.Parents = new List<string> { parentId };
             try
             {
@@ -159,6 +159,7 @@ namespace Jaxx.FileSync.GoogleDrive
                 //List all of the files and directories for the current user.  
                 // Documentation: https://developers.google.com/drive/v2/reference/files/list
                 FilesResource.ListRequest list = service.Files.List();
+                list.Fields = "nextPageToken, files(id, name, parents, modifiedTime, createdTime, mimeType)";
                 if (search != null)
                 {
                     list.Q = search;
@@ -206,15 +207,15 @@ namespace Jaxx.FileSync.GoogleDrive
         /// <returns></returns>
         public static List<File> GetFilesByName(DriveService service, string name, NameSearchOperators searchOperator)
         {
-            switch(searchOperator)
+            switch (searchOperator)
             {
                 default:
-                case NameSearchOperators.Contains:                
+                case NameSearchOperators.Contains:
                     return GetFiles(service, $"name contains '{name}'");
                 case NameSearchOperators.Is:
                     return GetFiles(service, $"name = '{name}'");
                 case NameSearchOperators.IsNot:
-                    return GetFiles(service, $"name != '{name}'");   
+                    return GetFiles(service, $"name != '{name}'");
             }
         }
 

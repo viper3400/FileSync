@@ -57,7 +57,24 @@ namespace Jaxx.FileSync
         {
             ConfigureCommandLineCreateCommand(iocContainer, app, certFile, serviceAccountMail);
             ConfigureCommandLineDeleteCommand(iocContainer, app, certFile, serviceAccountMail);
+            ConfigureCommandLineListCommand(iocContainer, app, certFile, serviceAccountMail);
         }
+
+        private static void ConfigureCommandLineListCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
+        {
+            var list = app.Command("list", config =>
+            {
+                config.OnExecute(() =>
+                {
+                    ReadFiles(iocContainer, certFile.Value(), serviceAccountMail.Value());
+                    //config.ShowHelp(); //show help
+                    return 0; 
+                });
+                config.HelpOption("-? | -h | --help"); //show help on --help
+
+            });
+        }
+       
 
         private static void ConfigureCommandLineDeleteCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
         {
@@ -207,6 +224,27 @@ namespace Jaxx.FileSync
                 int.TryParse(fileAge, out age);
 
                 deleter.DeleteAgedFiles(age, folderName);
+            }
+        }
+
+        private static void ReadFiles(IContainer iocContainer, string certFile, string serviceAccountMail)
+        {
+
+            using (var scope = iocContainer.BeginLifetimeScope())
+            {
+                var accountProvider = scope.Resolve<IGoogleAccountProvider>(
+                    new NamedParameter("certFile", certFile),
+                    new NamedParameter("serviceAccountEmail", serviceAccountMail));
+                
+                var reader = scope.Resolve<IReadController>(
+                     new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
+
+                var list = reader.List();
+                foreach (var file in list)
+                {
+                    Console.WriteLine(file);
+                }
+                               
             }
         }
     }
