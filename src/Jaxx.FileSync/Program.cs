@@ -246,6 +246,10 @@ namespace Jaxx.FileSync
                 }
                                
             }
+            Console.WriteLine();
+            Console.WriteLine("==================================");
+            Console.WriteLine("Press a key to exit ... ");
+            Console.ReadKey();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Jaxx.FileSync.GoogleDrive
 
             foreach(var file in fileList)
             {
-                var fileString = $"[{file.MimeType}] -> {file.Name}, {file.ModifiedTime}";
+                var fileString = $"[{file.Id}] [{file.MimeType}] -> {file.Name}, {file.ModifiedTime}";
                 stringList.Add(fileString);
             }
 
