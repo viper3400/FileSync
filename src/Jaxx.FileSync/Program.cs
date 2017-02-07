@@ -68,13 +68,13 @@ namespace Jaxx.FileSync
                 {
                     ReadFiles(iocContainer, certFile.Value(), serviceAccountMail.Value());
                     //config.ShowHelp(); //show help
-                    return 0; 
+                    return 0;
                 });
                 config.HelpOption("-? | -h | --help"); //show help on --help
 
             });
         }
-       
+
 
         private static void ConfigureCommandLineDeleteCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
         {
@@ -110,7 +110,32 @@ namespace Jaxx.FileSync
                     }
                 });
             });
+
+            delete.Command("object", config =>
+            {
+                config.Description = "Delete the object with the given id.";
+                config.HelpOption("-? | -h | --help");
+                var objectId = config.Option("-i | --id", "The id of the object which should be deleted", CommandOptionType.SingleValue);
+
+                config.OnExecute(() =>
+                {
+                    if (certFile.HasValue() && serviceAccountMail.HasValue() && objectId.HasValue())
+                    {
+                        DeleteObject(iocContainer, certFile.Value(), serviceAccountMail.Value(), objectId.Value());
+                        return 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"A mandatory value was not set.");
+                        config.ShowHelp();
+                        return 1;
+                    }
+                }            
+                );
+            });
         }
+
+       
 
         private static void ConfigureCommandLineCreateCommand(IContainer iocContainer, CommandLineApplication app, CommandOption certFile, CommandOption serviceAccountMail)
         {
@@ -217,7 +242,7 @@ namespace Jaxx.FileSync
                     new NamedParameter("certFile", certFile),
                     new NamedParameter("serviceAccountEmail", serviceAccountMail));
 
-                var deleter = scope.Resolve<IDeleteController>(                    
+                var deleter = scope.Resolve<IDeleteController>(
                     new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
 
                 int age;
@@ -235,7 +260,7 @@ namespace Jaxx.FileSync
                 var accountProvider = scope.Resolve<IGoogleAccountProvider>(
                     new NamedParameter("certFile", certFile),
                     new NamedParameter("serviceAccountEmail", serviceAccountMail));
-                
+
                 var reader = scope.Resolve<IReadController>(
                      new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
 
@@ -244,12 +269,28 @@ namespace Jaxx.FileSync
                 {
                     Console.WriteLine(file);
                 }
-                               
+
             }
             Console.WriteLine();
             Console.WriteLine("==================================");
             Console.WriteLine("Press a key to exit ... ");
             Console.ReadKey();
+        }
+
+        private static void DeleteObject(IContainer iocContainer, string certFile, string serviceAccountMail, string objectId)
+        {
+            using (var scope = iocContainer.BeginLifetimeScope())
+            {
+                var accountProvider = scope.Resolve<IGoogleAccountProvider>(
+                    new NamedParameter("certFile", certFile),
+                    new NamedParameter("serviceAccountEmail", serviceAccountMail));
+
+                var deleter = scope.Resolve<IDeleteController>(
+                   new TypedParameter(typeof(IGoogleAccountProvider), accountProvider));
+
+                deleter.DeleteObject(objectId);
+
+            }
         }
     }
 }

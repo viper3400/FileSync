@@ -198,6 +198,13 @@ namespace Jaxx.FileSync.GoogleDrive
             return Files;
         }
 
+        public static bool DeleteObject(DriveService service, string objectId )
+        {
+            FilesResource.DeleteRequest DeleteRequest = service.Files.Delete(objectId);
+            DeleteRequest.Execute();
+            return true;
+        }
+
         /// <summary>
         /// List all of the files and directories matching the search name
         /// </summary>

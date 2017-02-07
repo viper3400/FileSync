@@ -38,5 +38,10 @@ namespace Jaxx.FileSync.GoogleDrive
 
             return true;
         }
+
+        public bool DeleteObject(string objectId)
+        {
+            return DriveApi.DeleteObject(_service, objectId);
+        }
     }
 }
