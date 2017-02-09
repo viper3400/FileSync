@@ -10,6 +10,29 @@
 
 [Download latest release](https://github.com/viper3400/FileSync/releases/latest)
 
+**Table Of Contents**
+<!-- TOC depthFrom:2 -->
+
+- [Prerequisites](#prerequisites)
+- [Command Line Usage](#command-line-usage)
+    - [Global Options and Commands](#global-options-and-commands)
+        - [Example](#example)
+        - [Global Options in Detail](#global-options-in-detail)
+    - [Upload a File](#upload-a-file)
+        - [Example](#example-1)
+        - [Options for Creating a File in Detail](#options-for-creating-a-file-in-detail)
+    - [Create a Folder](#create-a-folder)
+        - [Example](#example-2)
+        - [Options for Creating a Folder in Detail](#options-for-creating-a-folder-in-detail)
+    - [List contents](#list-contents)
+        - [Example](#example-3)
+- [Scenario](#scenario)
+- [Automation / Periodical Execution](#automation--periodical-execution)
+- [Enhancements](#enhancements)
+- [Build and Run from Source](#build-and-run-from-source)
+
+<!-- /TOC -->
+
 ## Prerequisites
 
 * The released version is tested with Windows 10.
@@ -21,12 +44,35 @@
 
 ## Command Line Usage
 
+### Global Options and Commands
+
+```
+Jaxx.FileSync.exe -c ["PATH_TO_CERTFILE\key.p12"] -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] [COMMANDS] [COMMANDS_OPTIONS]
+```
+
+* **Global options are mandatory!**
+
+#### Example
+
+```
+Jaxx.FileSync.exe -c "C:\Users\mike\privatekeys\mikeskey.p12" -s "mikesservice@gserviceaccount.com" list
+```
+
+#### Global Options in Detail
+
+* -c ["PATH_TO_CERTFILE\key.p12"] 
+  * Provide the full path and filename of the private certificate p12 file you've downloaded from google api 
+    console after you've created the service account.
+* -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+  * Provide the mail account you've created for the service account.
+* [COMMANDS] [COMMANDS_OPTIONS]
+  * commands and subcommands as *list*, *create file*, *delete object* (as follows)
+
 ### Upload a File
 
 ```
 Jaxx.FileSync.exe 
-      -c ["PATH_TO_CERTFILE\key.p12"] 
-      -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+      [GLOBAL_OPTIONS]
       create file
       -g ["DRIVEUSER@googlemail.com"] 
       -f ["UPLOAD_FILE"]
@@ -49,11 +95,8 @@ Jaxx.FileSync.exe
 
 #### Options for Creating a File in Detail
 
-* -c ["PATH_TO_CERTFILE\key.p12"] 
-  * Provide the full path and filename of the private certificate p12 file you've downloaded from google api 
-    console after you've created the service account.
-* -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
-  * Provide the mail account you've created for the service account.
+* [GLOBAL_OPTIONS]
+  * see there
 * create
   * Simply calls the command to create (upload) an object.
 * file
@@ -73,8 +116,7 @@ Starting with release 1.1.0 you can create folders in you drive storage.
 
 ```
 Jaxx.FileSync.exe 
-      -c ["PATH_TO_CERTFILE\key.p12"] 
-      -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+      [GLOBAL_OPTIONS]
       create folder
       -g ["DRIVEUSER@googlemail.com"] 
       -n ["NEW_FOLDER_NAME"]
@@ -100,11 +142,8 @@ Jaxx.FileSync.exe
 
 #### Options for Creating a Folder in Detail
 
-* -c ["PATH_TO_CERTFILE\key.p12"] 
-  * Provide the full path and filename of the private certificate p12 file you've downloaded from google api 
-    console after you've created the service account.
-* -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
-  * Provide the mail account you've created for the service account.
+* [GLOBAL_OPTIONS]
+  * see there
 * create
   * Simply calls the command to create an object.
 * folder
@@ -116,6 +155,26 @@ Jaxx.FileSync.exe
   * Name of the new folder
 * -p ["PARENTFOLDER"]
   * Name of the parent folder ('root' for root folder)
+
+### List contents
+
+Starting with release 1.2.0 you can list the content in you drive storage. 
+
+```
+Jaxx.FileSync.exe [GLOBAL_OPTIONS] list
+```
+
+This will list all obejcts available in your store with the pattern:
+
+```
+[ObjectId] [mimeType] -> filename.ext, lastmodified
+```
+
+#### Example
+
+```
+Jaxx.FileSync.exe -c "C:\Users\mike\privatekeys\mikeskey.p12" -s "mikesservice@gserviceaccount.com" list
+```
 
 ## Scenario
 Mike runs a little MySQL database on a Windows OS. Each night it creates a dump of the database to backup data.
@@ -136,6 +195,9 @@ visible in his own cloud drive in "shared files".
 He created a little batch file which first creates the backup of the MySQL database and uploads the backuped
 file in a next script. The batch file is trigger via build in [Windows Task Scheduler](https://technet.microsoft.com/en-us/library/cc721931(v=ws.11).aspx).
 
+After a while his store grows and grows as more and more backups are uploaded. He decides, that he only wants to keep the backups from the last 30 days. But wait!
+What if the backups won't run for some days and Mike didn't notice this for any reason? So he decided, that he always want to keep the last 10 files.
+
 ## Automation / Periodical Execution
 
 As Mike in our scenario: Use the [Windows Task Scheduler](https://technet.microsoft.com/en-us/library/cc721931(v=ws.11).aspx) to automate FileSync.
@@ -147,10 +209,10 @@ This should add a deletion feature which "cleans" files having reached a certain
 
 This is all I need for the moment. Check the issues page on GitHub for further "nice to haves", feel free to create issues or to contribute.
 
-## Build from Source
+## Build and Run from Source
 
 * Microsoft Visual Studio 2015 Community Edition
 * .NET Core
 
-To build run _dotnet restore_ and _dotnet run_.
+To build & run, run _dotnet restore_ and _dotnet run_.
 
