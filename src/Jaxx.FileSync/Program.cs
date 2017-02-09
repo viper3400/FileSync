@@ -93,13 +93,14 @@ namespace Jaxx.FileSync
                 config.Description = "Delete files wich haven't changed since a certain time span.";
                 config.HelpOption("-? | -h | --help");
                 var fileAge = config.Option("-a | --AgeInDays", "The time span in days (mandatory).", CommandOptionType.SingleValue);
-                var folder = config.Option("-f | --folder", "The folder in which the files should be deleted", CommandOptionType.SingleValue);
+                var folder = config.Option("-f | --folder", "The folder in which the files should be deleted (mandatory).", CommandOptionType.SingleValue);
+                var preview = config.Option("-p || --preview", "Don't delete anything, just preview what would happen (optional).", CommandOptionType.NoValue);
 
                 config.OnExecute(() =>
                 {
                     if (certFile.HasValue() && serviceAccountMail.HasValue() && fileAge.HasValue() && folder.HasValue())
                     {
-                        DeleteAgedFiles(iocContainer, certFile.Value(), serviceAccountMail.Value(), fileAge.Value(), folder.Value());
+                        DeleteAgedFiles(iocContainer, certFile.Value(), serviceAccountMail.Value(), fileAge.Value(), folder.Value(), preview.HasValue());
                         return 0;
                     }
                     else
@@ -234,7 +235,7 @@ namespace Jaxx.FileSync
             }
         }
 
-        private static void DeleteAgedFiles(IContainer iocContainer, string certFile, string serviceAccountMail, string fileAge, string folderName)
+        private static void DeleteAgedFiles(IContainer iocContainer, string certFile, string serviceAccountMail, string fileAge, string folderName, bool preview)
         {
             using (var scope = iocContainer.BeginLifetimeScope())
             {
@@ -248,7 +249,7 @@ namespace Jaxx.FileSync
                 int age;
                 int.TryParse(fileAge, out age);
 
-                deleter.DeleteAgedFiles(age, folderName);
+                deleter.DeleteAgedFiles(age, folderName, preview);
             }
         }
 

@@ -7,7 +7,7 @@ namespace Jaxx.FileSync.Shared.Interfaces
 {
     public interface IDeleteController
     {
-        bool DeleteAgedFiles(int fileAgeInDays, string folder);
+        bool DeleteAgedFiles(int fileAgeInDays, string folder, bool preview);
         bool DeleteObject(string objectId);
     }
 }

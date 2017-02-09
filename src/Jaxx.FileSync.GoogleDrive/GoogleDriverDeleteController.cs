@@ -14,7 +14,7 @@ namespace Jaxx.FileSync.GoogleDrive
             _service = accountProvider.CreateDriveService();
         }
 
-        public bool DeleteAgedFiles(int fileAgeInDays, string folder)
+        public bool DeleteAgedFiles(int fileAgeInDays, string folder, bool preview)
         {
 
             var folders = DriveApi.GetFilesByName(_service, folder, DriveApi.NameSearchOperators.Is);
@@ -32,8 +32,11 @@ namespace Jaxx.FileSync.GoogleDrive
 
             foreach (var file in files)
             {
-                //Console.WriteLine($"This would delete {file.Name}, last modified on {file.ModifiedTime.Value}");
-                Console.WriteLine($"This would delete {file.Name}, {file.ModifiedTime}, but function is not yet implemented.");
+                if (preview)
+                {
+                    Console.WriteLine($"This would delete {file.Name}, {file.ModifiedTime} (preview mode).");
+                }
+                else DeleteObject(file.Id);
             }
 
             return true;
