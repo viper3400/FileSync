@@ -14,7 +14,7 @@ namespace Jaxx.FileSync.GoogleDrive
             _service = accountProvider.CreateDriveService();
         }
 
-        public bool DeleteAgedFiles(int fileAgeInDays, string folder, bool preview)
+        public bool DeleteAgedFiles(int fileAgeInDays, string folder, int filesToKeepAtLeast, bool preview)
         {
 
             var folders = DriveApi.GetFilesByName(_service, folder, DriveApi.NameSearchOperators.Is);
@@ -28,7 +28,16 @@ namespace Jaxx.FileSync.GoogleDrive
             
             string timeString = time.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss", DateTimeFormatInfo.InvariantInfo);
             var files = DriveApi.GetFiles(_service, $"modifiedTime <= '{timeString}' and '{folders[0].Id}' in parents");
-            //var files = DriveApi.GetFiles(_service, $"modifiedTime <= '{timeString}'");
+
+            if (filesToKeepAtLeast > 1)
+            {
+                var newFiles = DriveApi.GetFiles(_service, $"modifiedTime > '{timeString}' and '{folders[0].Id}' in parents");
+                if (newFiles.Count < filesToKeepAtLeast)
+                {
+                    Console.Write($"You wanted to keep at least {filesToKeepAtLeast} files in store, but if you go on there would just be {newFiles.Count} left");
+                    return false;
+                }
+            }
 
             foreach (var file in files)
             {
