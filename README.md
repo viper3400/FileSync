@@ -281,3 +281,5 @@ Released version is shipped with (and _dotnet restore_ will restore the NuGet pa
    * [https://developers.google.com/api-client-library/dotnet/](https://developers.google.com/api-client-library/dotnet/)
 * .NET Standard by Microsoft
    * [https://www.microsoft.com/net](https://www.microsoft.com/net)
+* Autofac
+   * [https://autofac.org](https://autofac.org/)
