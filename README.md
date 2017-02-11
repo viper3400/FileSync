@@ -43,7 +43,10 @@
 ### Global Options and Commands
 
 ```
-Jaxx.FileSync.exe -c ["PATH_TO_CERTFILE\key.p12"] -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] [COMMANDS] [COMMANDS_OPTIONS]
+Jaxx.FileSync.exe 
+    -c ["PATH_TO_CERTFILE\key.p12"] 
+    -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+    [COMMANDS] [COMMANDS_OPTIONS]
 ```
 
 * **Global options are mandatory!**
@@ -51,7 +54,10 @@ Jaxx.FileSync.exe -c ["PATH_TO_CERTFILE\key.p12"] -s ["YOUR_SERVICE_ACCOUNT@gser
 #### Example
 
 ```
-Jaxx.FileSync.exe -c "C:\Users\mike\privatekeys\mikeskey.p12" -s "mikesservice@gserviceaccount.com" list
+Jaxx.FileSync.exe 
+    -c "C:\Users\mike\privatekeys\mikeskey.p12" 
+    -s "mikesservice@gserviceaccount.com"
+    list
 ```
 
 #### Global Options in Detail
@@ -188,7 +194,7 @@ Jaxx.FileSync.exe
 As in all calls before, pass the global options, followed by the command *delete object* the parameter *-i* and the object id.
 There is no differene between a file and a folder, they are all objects.
 
-> DELETE A FOLDER WILL DELETE ALL CONTENT IN THIS FOLDER, TOO! THERE WILL BE NO WARNIG!
+> DELETE A FOLDER WILL DELETE ALL CONTENT IN THIS FOLDER, TOO! THERE WILL BE NO WARNING!
 
 **All options are mandatory!**
 
@@ -258,10 +264,7 @@ As Mike in our scenario: Use the [Windows Task Scheduler](https://technet.micros
 
 ## Enhancements
 
-I plan to implement a "houskeeping" feature in a next step. 
-This should add a deletion feature which "cleans" files having reached a certain age. 
-
-This is all I need for the moment. Check the issues page on GitHub for further "nice to haves", feel free to create issues or to contribute.
+Check the issues page on GitHub for further "nice to haves", feel free to create issues or to contribute.
 
 ## Build and Run from Source
 
