@@ -1,6 +1,6 @@
 # FileSync
 
-* FileSync is very basic implementation of .Net GoogleDriveAPI v3. 
+* FileSync is very basic implementation of .NET GoogleDriveAPI v3. 
 * It Uploads a single file to Google Drive cloud storage, using a Google [service account](https://developers.google.com/api-client-library/dotnet/get_started#service-accounts).
 * It grants permission to this file to another Google Drive account.
 * It is shipped with a tiny command line application.
@@ -9,6 +9,25 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/bn5jakeg7dkk3uhf/branch/master?svg=true)](https://ci.appveyor.com/project/viper3400/filesync/branch/master)
 
 [Download latest release](https://github.com/viper3400/FileSync/releases/latest)
+
+**Table Of Contents**
+<!-- TOC depthFrom:2 depthTo:3 -->
+
+- [Prerequisites](#prerequisites)
+- [Command Line Usage](#command-line-usage)
+    - [Global Options and Commands](#global-options-and-commands)
+    - [Upload a File](#upload-a-file)
+    - [Create a Folder](#create-a-folder)
+    - [List Contents](#list-contents)
+    - [Delete Objects](#delete-objects)
+    - [Delete Objects by Age](#delete-objects-by-age)
+- [Scenario](#scenario)
+- [Automation / Periodical Execution](#automation--periodical-execution)
+- [Enhancements](#enhancements)
+- [Build and Run from Source](#build-and-run-from-source)
+- [Third Party](#third-party)
+
+<!-- /TOC -->
 
 ## Prerequisites
 
@@ -21,12 +40,35 @@
 
 ## Command Line Usage
 
+### Global Options and Commands
+
+```
+Jaxx.FileSync.exe -c ["PATH_TO_CERTFILE\key.p12"] -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] [COMMANDS] [COMMANDS_OPTIONS]
+```
+
+* **Global options are mandatory!**
+
+#### Example
+
+```
+Jaxx.FileSync.exe -c "C:\Users\mike\privatekeys\mikeskey.p12" -s "mikesservice@gserviceaccount.com" list
+```
+
+#### Global Options in Detail
+
+* -c ["PATH_TO_CERTFILE\key.p12"] 
+  * Provide the full path and filename of the private certificate p12 file you've downloaded from google api 
+    console after you've created the service account.
+* -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+  * Provide the mail account you've created for the service account.
+* [COMMANDS] [COMMANDS_OPTIONS]
+  * commands and subcommands as *list*, *create file*, *delete object* (as follows)
+
 ### Upload a File
 
 ```
 Jaxx.FileSync.exe 
-      -c ["PATH_TO_CERTFILE\key.p12"] 
-      -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+      [GLOBAL_OPTIONS]
       create file
       -g ["DRIVEUSER@googlemail.com"] 
       -f ["UPLOAD_FILE"]
@@ -49,11 +91,8 @@ Jaxx.FileSync.exe
 
 #### Options for Creating a File in Detail
 
-* -c ["PATH_TO_CERTFILE\key.p12"] 
-  * Provide the full path and filename of the private certificate p12 file you've downloaded from google api 
-    console after you've created the service account.
-* -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
-  * Provide the mail account you've created for the service account.
+* [GLOBAL_OPTIONS]
+  * see there
 * create
   * Simply calls the command to create (upload) an object.
 * file
@@ -73,8 +112,7 @@ Starting with release 1.1.0 you can create folders in you drive storage.
 
 ```
 Jaxx.FileSync.exe 
-      -c ["PATH_TO_CERTFILE\key.p12"] 
-      -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
+      [GLOBAL_OPTIONS]
       create folder
       -g ["DRIVEUSER@googlemail.com"] 
       -n ["NEW_FOLDER_NAME"]
@@ -100,11 +138,8 @@ Jaxx.FileSync.exe
 
 #### Options for Creating a Folder in Detail
 
-* -c ["PATH_TO_CERTFILE\key.p12"] 
-  * Provide the full path and filename of the private certificate p12 file you've downloaded from google api 
-    console after you've created the service account.
-* -s ["YOUR_SERVICE_ACCOUNT@gserviceaccount.com"] 
-  * Provide the mail account you've created for the service account.
+* [GLOBAL_OPTIONS]
+  * see there
 * create
   * Simply calls the command to create an object.
 * folder
@@ -116,6 +151,84 @@ Jaxx.FileSync.exe
   * Name of the new folder
 * -p ["PARENTFOLDER"]
   * Name of the parent folder ('root' for root folder)
+
+### List Contents
+
+Starting with release 1.2.0 you can list the content in your drive storage. 
+
+```
+Jaxx.FileSync.exe [GLOBAL_OPTIONS] list
+```
+
+This will list all objects available in your storage:
+
+```
+[ObjectId] [mimeType] -> filename.ext, lastmodified
+```
+
+> THE OBJECT ID IS THE LISTED ID *WITHOUT* THE SQUARE BRACKETS!
+
+#### Example
+
+```
+Jaxx.FileSync.exe -c "C:\Users\mike\privatekeys\mikeskey.p12" -s "mikesservice@gserviceaccount.com" list
+```
+
+### Delete Objects
+
+Starting with release 1.2.0 you can delete single objects in your drive storage. 
+To delete an object you'll need the object id you can gather with the list command.
+
+```
+Jaxx.FileSync.exe 
+      -c "C:\Users\mike\privatekeys\mikeskey.p12" 
+      -s "mikesservice@gserviceaccount.com" 
+      delete object -i "7A-155DKmzQ-SGD9zync0cdK8LNz"
+```
+As in all calls before, pass the global options, followed by the command *delete object* the parameter *-i* and the object id.
+There is no differene between a file and a folder, they are all objects.
+
+> DELETE A FOLDER WILL DELETE ALL CONTENT IN THIS FOLDER, TOO! THERE WILL BE NO WARNIG!
+
+**All options are mandatory!**
+
+### Delete Objects by Age
+
+Beeing a kind of backup tool, FileSync will run unattended for a while. 
+To clean up old backups in the Drive storage you could use the "delete agedfiles" command (Release >= 1.2.0).
+
+```
+Jaxx.FileSync.exe 
+      [GLOBAL_OPTIONS]
+      delete agedfiles
+      -a [AGE_IN_DAYS] 
+      -f [PARENTFOLDER]
+      -k [DAYS_TO_KEEP]
+      -p 
+```
+
+#### Example
+```
+Jaxx.FileSync.exe -c "C:\Users\mike\privatekeys\mikeskey.p12" -s "mikesservice@gserviceaccount.com" 
+    delete agedfiles -a 30 -f "mikesbackups" -k 10
+```
+
+#### Options for in Detail
+
+* [GLOBAL_OPTIONS]
+  * see there *(mandatory)*
+* delete agedfiles
+  * Calls the command
+* -a [AGE_IN_DAYS] *(mandatory)*
+  * Files which are not modified since the passed count of days will be affected.
+* -f [PARENTFOLDER] *(mandatory)*
+  * Just files in this folder will be affected.
+* -k [DAYS_TO_KEEP] *(opitonal)*
+  * optional parameter, will prevent to delete this number of files, if they are the last ones which 
+    had have been modified - despite of having reached the given age. (see [Scenario](#scenario))
+* -p *(optional)*
+  * Passing this optional parameter will enable the preview mode. Nothing will be deleted but you'll see what would be deleted.
+
 
 ## Scenario
 Mike runs a little MySQL database on a Windows OS. Each night it creates a dump of the database to backup data.
@@ -136,6 +249,9 @@ visible in his own cloud drive in "shared files".
 He created a little batch file which first creates the backup of the MySQL database and uploads the backuped
 file in a next script. The batch file is trigger via build in [Windows Task Scheduler](https://technet.microsoft.com/en-us/library/cc721931(v=ws.11).aspx).
 
+After a while his store grows and grows as more and more backups are uploaded. He decides, that he only wants to keep the backups from the last 30 days. But wait!
+What if the backups won't run for some days and Mike didn't notice this for any reason? So he decided, that he always want to keep the last 10 files.
+
 ## Automation / Periodical Execution
 
 As Mike in our scenario: Use the [Windows Task Scheduler](https://technet.microsoft.com/en-us/library/cc721931(v=ws.11).aspx) to automate FileSync.
@@ -147,10 +263,18 @@ This should add a deletion feature which "cleans" files having reached a certain
 
 This is all I need for the moment. Check the issues page on GitHub for further "nice to haves", feel free to create issues or to contribute.
 
-## Build from Source
+## Build and Run from Source
 
 * Microsoft Visual Studio 2015 Community Edition
 * .NET Core
 
-To build run _dotnet restore_ and _dotnet run_.
+To build & run, run _dotnet restore_ and _dotnet run_.
 
+## Third Party
+
+Released version is shipped with (and _dotnet restore_ will restore the NuGet packages) the following third party libraries:
+
+* Google.Apis.Drive.v3 & Google.Apis by Google Inc. 
+   * [https://developers.google.com/api-client-library/dotnet/](https://developers.google.com/api-client-library/dotnet/)
+* .NET Standard by Microsoft
+   * [https://www.microsoft.com/net](https://www.microsoft.com/net)
