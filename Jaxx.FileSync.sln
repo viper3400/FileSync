@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ABCAF428-27B0-45EA-A3CA-723AC5A12D3E}"
 EndProject
@@ -10,11 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		global.json = global.json
 	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Jaxx.FileSync.Shared", "src\Jaxx.FileSync.Shared\Jaxx.FileSync.Shared.xproj", "{11C01071-E313-4755-8635-C85C3AB9882D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaxx.FileSync.Shared", "src\Jaxx.FileSync.Shared\Jaxx.FileSync.Shared.csproj", "{11C01071-E313-4755-8635-C85C3AB9882D}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Jaxx.FileSync.GoogleDrive", "src\Jaxx.FileSync.GoogleDrive\Jaxx.FileSync.GoogleDrive.xproj", "{BF2FF1F5-8E14-471B-A06D-79FCDE73832F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaxx.FileSync.GoogleDrive", "src\Jaxx.FileSync.GoogleDrive\Jaxx.FileSync.GoogleDrive.csproj", "{BF2FF1F5-8E14-471B-A06D-79FCDE73832F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Jaxx.FileSync", "src\Jaxx.FileSync\Jaxx.FileSync.xproj", "{84D9E832-CA24-421A-B274-E6B9BBB9E42A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jaxx.FileSync", "src\Jaxx.FileSync\Jaxx.FileSync.csproj", "{84D9E832-CA24-421A-B274-E6B9BBB9E42A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,5 +42,8 @@ Global
 		{11C01071-E313-4755-8635-C85C3AB9882D} = {ABCAF428-27B0-45EA-A3CA-723AC5A12D3E}
 		{BF2FF1F5-8E14-471B-A06D-79FCDE73832F} = {ABCAF428-27B0-45EA-A3CA-723AC5A12D3E}
 		{84D9E832-CA24-421A-B274-E6B9BBB9E42A} = {ABCAF428-27B0-45EA-A3CA-723AC5A12D3E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {853CC2DC-4DAD-4A2C-B0E6-BFA2DE59D5D9}
 	EndGlobalSection
 EndGlobal
