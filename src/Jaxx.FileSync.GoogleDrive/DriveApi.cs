@@ -229,12 +229,13 @@ namespace Jaxx.FileSync.GoogleDrive
         // tries to figure out the mime type of the file.
         private static string GetMimeType(string fileName)
         {
-            string mimeType = "application/unknown";
+            //string mimeType = "application/unknown";
             string ext = System.IO.Path.GetExtension(fileName).ToLower();
-            //TODO: Eliminate Win32 dependency
-            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
-            if (regKey != null && regKey.GetValue("Content Type") != null)
-                mimeType = regKey.GetValue("Content Type").ToString();
+
+            //Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
+            //if (regKey != null && regKey.GetValue("Content Type") != null)
+            //    mimeType = regKey.GetValue("Content Type").ToString();
+            string mimeType = MimeTypes.Core.MimeTypeMap.GetMimeType(ext, "application / unknown");
             return mimeType;
         }
 
