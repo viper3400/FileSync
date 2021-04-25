@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>1.2.0</VersionPrefix>
-    <TargetFrameworks>netcoreapp2.0;net461</TargetFrameworks>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Jaxx.FileSync</AssemblyName>
     <OutputType>Exe</OutputType>
     <PackageId>Jaxx.FileSync</PackageId>
