@@ -1,12 +1,12 @@
 # FileSync
 
 * FileSync is very basic implementation of .NET GoogleDriveAPI v3. 
-* It Uploads a single file to Google Drive cloud storage, using a Google [service account](https://developers.google.com/api-client-library/dotnet/get_started#service-accounts).
+* It uploads a single file to Google Drive cloud storage, using a Google [service account](https://developers.google.com/api-client-library/dotnet/get_started#service-accounts).
 * It grants permission to this file to another Google Drive account.
 * It is shipped with a tiny command line application.
 * For the moment it is *just* an uploader, not a file syncing tool at all.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/bn5jakeg7dkk3uhf/branch/master?svg=true)](https://ci.appveyor.com/project/viper3400/filesync/branch/master)
+[![.NET Publish](https://github.com/viper3400/FileSync/actions/workflows/dotnet-publish.yml/badge.svg?branch=2.0.0)](https://github.com/viper3400/FileSync/actions/workflows/dotnet-publish.yml)
 
 [Download latest release](https://github.com/viper3400/FileSync/releases/latest)
 
@@ -31,10 +31,9 @@
 
 ## Prerequisites
 
-* The released version is tested with Windows 10.
-* The released version requires .NET Version 4.6.1
+* The released version is tested with Windows 10 and Ubuntu 20.04.
 * You will need to create a google service account. Read [this](https://developers.google.com/identity/protocols/OAuth2ServiceAccount#creatinganaccount).
-* A service accounts is a different account, it's not your own Google account.
+* A service account is a different account, it's not your own Google account.
 * Service accounts have their own 15 GB Drive free space.
 * It's not visible via a web interface or somewhere else (unless you get a list via API, which is not implemented in FileSync at the moment).
 
@@ -268,8 +267,8 @@ Check the issues page on GitHub for further "nice to haves", feel free to create
 
 ## Build and Run from Source
 
-* Microsoft Visual Studio 2015 Community Edition
-* .NET Core
+* Microsoft Visual Studio 2019 Community Edition
+* .NET 5.0
 
 To build & run, run _dotnet restore_ and _dotnet run_.
 
@@ -279,7 +278,7 @@ Released version is shipped with (and _dotnet restore_ will restore the NuGet pa
 
 * Google.Apis.Drive.v3 & Google.Apis by Google Inc. 
    * [https://developers.google.com/api-client-library/dotnet/](https://developers.google.com/api-client-library/dotnet/)
-* .NET Standard by Microsoft
+* .NET by Microsoft
    * [https://www.microsoft.com/net](https://www.microsoft.com/net)
 * Autofac
    * [https://autofac.org](https://autofac.org/)
