@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <VersionPrefix>1.2.0</VersionPrefix>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,9 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis" Version="1.38.0" />
-    <PackageReference Include="Google.Apis.Drive.v3" Version="1.38.0.1491" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0-preview.19073.11" />
+    <PackageReference Include="Google.Apis" Version="1.51.0" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.51.0.2300" />
     <PackageReference Include="MimeTypeMap.Core" Version="1.0.0" />
   </ItemGroup>
 
